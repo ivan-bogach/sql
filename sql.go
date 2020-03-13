@@ -36,6 +36,21 @@ func CreateTableIfNotExists(tableName, tablePath, columnsString string) {
 
 }
 
+func SelectRows(tablePath, tableName, queryString string) *sql.Rows {
+	c := color.New(color.FgGreen)
+	c.Printf("SQL Query: ' %s '\n ", queryString)
+
+	db, _ := sql.Open(dbType, tablePath)
+	defer db.Close()
+	rows, err := db.Query(queryString)
+	if err != nil {
+		color.Red("Error occurred")
+	}
+	d := color.New(color.FgGreen, color.Bold)
+	d.Println("Ok!")
+	return rows
+}
+
 func ExecRow(tablePath, queryString string) {
 	db, _ := sql.Open(dbType, tablePath)
 	defer db.Close()
