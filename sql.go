@@ -2,7 +2,7 @@ package sql
 
 import (
 	"database/sql"
-	"strings"
+	"log"
 
 	"github.com/fatih/color"
 	_ "github.com/mattn/go-sqlite3"
@@ -12,32 +12,54 @@ var (
 	dbType = "sqlite3"
 )
 
-func prepareExec(db *sql.DB, queryString string) error {
+func prepareExec(db *sql.DB, queryString string) {
+	c := color.New(color.FgGreen)
+	c.Printf("SQL Query: ' %s '\n ", queryString)
+
 	statement, err := db.Prepare(queryString)
 	if err != nil {
-		color.Red("prepareExec():")
-		return err
+		color.Red("Error occurred")
+		log.Fatal(err)
 	}
 	statement.Exec()
-	return nil
+	d := color.New(color.FgGreen, color.Bold)
+
+	d.Println("Ok!")
+
 }
 
-func getColumns(columnsWithType []string) string {
-	var result string
-	for _, columnWithType := range columnsWithType {
-		result += columnWithType + ","
-	}
-	return strings.TrimSuffix(result, ",")
-}
-
-// CreateTableIfNotExists creates table with columns
-func CreateTableIfNotExists(columnsWithType []string, tableName, dbPath string) error {
-	queryString := "CREATE TABLE IF NOT EXISTS " + tableName + " (" + getColumns(columnsWithType) + ");"
-	db, _ := sql.Open(dbType, dbPath)
+func CreateTableIfNotExists(tableName, tablePath, columnsString string) {
+	queryString := "CREATE TABLE IF NOT EXISTS " + tableName + " (" + columnsString + ");"
+	db, _ := sql.Open(dbType, tablePath)
 	defer db.Close()
-	err := prepareExec(db, queryString)
+	prepareExec(db, queryString)
+
+}
+
+func sqliteExecRow(tablePath, queryString string) {
+	db, _ := sql.Open(dbType, tablePath)
+	defer db.Close()
+	prepareExec(db, queryString)
+}
+
+func sqliteExecRows(tablePath, queryString string) {
+	c := color.New(color.FgGreen)
+	c.Printf("SQL Query: ' %s '\n ", queryString)
+
+	db, _ := sql.Open(dbType, tablePath)
+	defer db.Close()
+
+	result, err := db.Exec(queryString)
 	if err != nil {
-		return err
+		color.Red("Error occurred")
+		log.Fatal(err)
 	}
-	return err
+	numRows, err := result.RowsAffected()
+	if err != nil {
+		color.Red("Error occurred")
+		log.Fatal(err)
+	}
+
+	d := color.New(color.FgGreen, color.Bold)
+	d.Println("Added %d rows!", numRows)
 }
