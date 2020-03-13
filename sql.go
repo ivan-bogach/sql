@@ -36,13 +36,13 @@ func CreateTableIfNotExists(tableName, tablePath, columnsString string) {
 
 }
 
-func sqliteExecRow(tablePath, queryString string) {
+func ExecRow(tablePath, queryString string) {
 	db, _ := sql.Open(dbType, tablePath)
 	defer db.Close()
 	prepareExec(db, queryString)
 }
 
-func sqliteExecRows(tablePath, queryString string) {
+func ExecRows(tablePath, queryString string) {
 	c := color.New(color.FgGreen)
 	c.Printf("SQL Query: ' %s '\n ", queryString)
 
