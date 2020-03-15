@@ -40,7 +40,7 @@ func CreateTableIfNotExists(tableName, tablePath, columnsString string) {
 func SelectRow(tablePath, queryString string) *sql.Row {
 	c := color.New(color.FgGreen)
 	c.Printf("SQL Query: ' %s '\n ", queryString)
-	db, _ := sql.Open("sqlite3", "db/db.sqlite")
+	db, _ := sql.Open(dbType, tablePath)
 	defer db.Close()
 
 	row := db.QueryRow(queryString)
