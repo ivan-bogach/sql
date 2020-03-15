@@ -3,6 +3,7 @@ package sql
 import (
 	"database/sql"
 	"log"
+	"strings"
 
 	"github.com/fatih/color"
 	_ "github.com/mattn/go-sqlite3"
@@ -77,4 +78,14 @@ func ExecRows(tablePath, queryString string) {
 
 	d := color.New(color.FgGreen, color.Bold)
 	d.Println("Added %d rows!", numRows)
+}
+
+func CommaJoin(sl []string) string {
+	var result string
+	for _, val := range sl {
+		result += val + ","
+	}
+	result = strings.TrimSuffix(result, ",")
+	return result
+
 }
