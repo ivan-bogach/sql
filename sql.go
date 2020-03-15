@@ -102,3 +102,28 @@ func CommaJoin(sl []string) string {
 	return result
 
 }
+
+func countRows(rows *sql.Rows) int {
+	counter := 0
+	for rows.Next() {
+		counter++
+	}
+	return counter
+}
+
+func CountRows(tablePath, tableName, columnName, columnValue string) int {
+	db, _ := sql.Open(dbType, tablePath)
+	defer db.Close()
+	queryString := "SELECT * FROM " + tableName + " where " + columnName + "='" + columnValue + "'"
+	c := color.New(color.FgGreen)
+	c.Printf("SQL Query: ' %s '\n ", queryString)
+	rows, err := db.Query(queryString)
+	if err != nil {
+		color.Red("Error occurred")
+		log.Fatal(err)
+	}
+	numRows := countRows(rows)
+	d := color.New(color.FgGreen, color.Bold)
+	d.Println("Added %d rows!", numRows)
+	return numRows
+}
