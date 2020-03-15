@@ -37,7 +37,7 @@ func CreateTableIfNotExists(tableName, tablePath, columnsString string) {
 
 }
 
-func SelectRows(tablePath, tableName, queryString string) *sql.Rows {
+func SelectRows(tablePath, queryString string) *sql.Rows {
 	c := color.New(color.FgGreen)
 	c.Printf("SQL Query: ' %s '\n ", queryString)
 
