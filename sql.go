@@ -79,7 +79,7 @@ func ExecRows(tablePath, queryString string) {
 	d.Println("Added %d rows!", numRows)
 }
 
-func SelectDistinct(tablePath, columnName, tableName string) (*sql.Rows, error) {
+func SelectDistinct(tablePath, tableName, columnName string) (*sql.Rows, error) {
 	queryString := "SELECT DISTINCT " + columnName + " FROM " + tableName
 	db, _ := sql.Open(dbType, tablePath)
 	defer db.Close()
@@ -90,7 +90,7 @@ func SelectDistinct(tablePath, columnName, tableName string) (*sql.Rows, error) 
 	return rows, nil
 }
 
-func SelectDistinctWhere(tablePath, columnName, tableName, where string) (*sql.Rows, error) {
+func SelectDistinctWhere(tablePath, tableName, columnName, where string) (*sql.Rows, error) {
 	queryString := "SELECT DISTINCT " + columnName + " FROM " + tableName + " WHERE " + where
 	db, _ := sql.Open(dbType, tablePath)
 	defer db.Close()
