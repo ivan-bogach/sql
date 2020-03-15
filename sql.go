@@ -13,11 +13,6 @@ var (
 	dbType = "sqlite3"
 )
 
-type NullString struct {
-	String string
-	Valid  bool // Valid is true if String is not NULL
-}
-
 func prepareExec(db *sql.DB, queryString string) {
 	c := color.New(color.FgGreen)
 	c.Printf("SQL Query: ' %s '\n ", queryString)
