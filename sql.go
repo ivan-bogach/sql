@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/ivan-bogach/utils"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -19,6 +20,7 @@ func prepareExec(db *sql.DB, queryString string) {
 
 	statement, err := db.Prepare(queryString)
 	if err != nil {
+		utils.SendErrorToTelegram("SQL: prepareExec Error occured")
 		color.Red("Error occurred")
 		log.Fatal(err)
 	}
@@ -58,6 +60,7 @@ func SelectRows(tablePath, queryString string) *sql.Rows {
 	defer db.Close()
 	rows, err := db.Query(queryString)
 	if err != nil {
+		utils.SendErrorToTelegram("SQL: SelectRows Error occured")
 		color.Red("Error occurred")
 	}
 	d := color.New(color.FgGreen, color.Bold)
@@ -80,6 +83,7 @@ func ExecRows(tablePath, queryString string) {
 
 	result, err := db.Exec(queryString)
 	if err != nil {
+		utils.SendErrorToTelegram("SQL: ExecRows Error occured")
 		color.Red("Error occurred")
 		log.Fatal(err)
 	}
@@ -119,6 +123,7 @@ func CountRows(tablePath, tableName, columnName, columnValue string) int {
 	c.Printf("SQL Query: ' %s '\n ", queryString)
 	rows, err := db.Query(queryString)
 	if err != nil {
+		utils.SendErrorToTelegram("SQL: CountRows Error occured")
 		color.Red("Error occurred")
 		log.Fatal(err)
 	}
